@@ -1,0 +1,89 @@
+{
+  "version": "1.0",
+  "emulators": {
+    "default": {
+      "port": 3569,
+      "serviceAccount": "emulator-account"
+    }
+  },
+  "accounts": {
+    "emulator-account": {
+      "address": "f8d6e0586b0a20c7",
+      "key": "${FLOW_EMULATOR_ACCOUNT_KEY}"
+    },
+    "testnet-account-old": {
+      "address": "0x8d177b02197bf5c8",
+      "key": {
+        "type": "hex",
+        "index": 0,
+        "signatureAlgorithm": "ECDSA_P256",
+        "hashAlgorithm": "SHA3_256",
+        "privateKey": "${FLOW_TESTNET_ACCOUNT_OLD_KEY}"
+      }
+    },
+    "testnet-account": {
+      "address": "0xbd9a0dc67c96cda1",
+      "key": {
+        "type": "hex",
+        "index": 0,
+        "signatureAlgorithm": "ECDSA_P256",
+        "hashAlgorithm": "SHA3_256",
+        "privateKey": "${FLOW_TESTNET_ACCOUNT_KEY}"
+      }
+    }
+  },
+  "contracts": {
+    "FlowPilotVault": "./cadence/contracts/FlowPilotVault.cdc",
+    "AutomationRules": "./cadence/contracts/AutomationRules.cdc",
+    "VaultSaveHandler": "./cadence/contracts/VaultSaveHandler.cdc",
+    "AutomationRulesV2": {
+      "source": "./cadence/contracts/AutomationRulesV2.cdc",
+      "aliases": {
+        "testnet": "0xbd9a0dc67c96cda1"
+      }
+    },
+    "VaultSaveHandlerV2": {
+      "source": "./cadence/contracts/VaultSaveHandlerV2.cdc",
+      "aliases": {
+        "testnet": "0xbd9a0dc67c96cda1"
+      }
+    },
+    "FlowTransactionScheduler": {
+      "source": "./cadence/contracts/stubs/FlowTransactionScheduler.cdc",
+      "aliases": {
+        "testnet": "0x8c5303eaa26202d6"
+      }
+    },
+    "FlowTransactionSchedulerUtils": {
+      "source": "./cadence/contracts/stubs/FlowTransactionSchedulerUtils.cdc",
+      "aliases": {
+        "testnet": "0x8c5303eaa26202d6"
+      }
+    },
+    "FlowToken": {
+      "source": "./cadence/contracts/stubs/FlowToken.cdc",
+      "aliases": {
+        "testnet": "0x7e60df042a9c0868"
+      }
+    },
+    "FungibleToken": {
+      "source": "./cadence/contracts/stubs/FungibleToken.cdc",
+      "aliases": {
+        "testnet": "0x9a0766d93b6608b7"
+      }
+    }
+  },
+  "deployments": {
+    "testnet": {
+      "testnet-account": [
+        "FlowPilotVault",
+        "AutomationRulesV2",
+        "VaultSaveHandlerV2"
+      ]
+    }
+  },
+  "networks": {
+    "emulator": "127.0.0.1:3569",
+    "testnet": "access.devnet.nodes.onflow.org:9000"
+  }
+}

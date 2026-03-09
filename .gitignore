@@ -1,0 +1,11 @@
+# Local environment secrets
+.env.local
+.env.*.local
+.env
+# Local sponsor credential note
+SPONSOR_CREDENTIALS.local.txt
+.next/
+.github/
+node_modules/
+
+devinfo/
