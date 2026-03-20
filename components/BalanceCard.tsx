@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import WithdrawModal from "./WithdrawModal";
+import { useTheme } from "@/context/ThemeProvider";
+
 
 type BalanceCardProps = {
   balance?: number;
@@ -21,122 +23,172 @@ function formatYield(n: number): string {
   return n.toFixed(4);
 }
 
-export default function BalanceCard({ balance = 0, rulesCount = 0, yieldEarned = 0, loading = false, onBalanceUpdate }: BalanceCardProps) {
+export default function BalanceCard({
+  balance = 0, rulesCount = 0, yieldEarned = 0, loading = false, onBalanceUpdate,
+}: BalanceCardProps) {
+  const { theme } = useTheme();
+  const dark = theme === "dark";
   const [withdrawModalOpen, setWithdrawModalOpen] = useState(false);
+
+  
+  const T = {
+    cardBg:          dark ? "#071209"                   : "#ffffff",
+    cardBorder:      dark ? "rgba(34,197,94,0.1)"       : "rgba(21,128,61,0.15)",
+    glowBg:          dark ? "rgba(34,197,94,0.07)"      : "rgba(22,163,74,0.06)",
+    labelText:       dark ? "#166534"                   : "#86a897",
+    balanceText:     dark ? "#f0fdf4"                   : "#052e16",
+    unitText:        dark ? "#4b7a57"                   : "#86a897",
+    dividerLine:     dark
+      ? "linear-gradient(90deg,transparent,#22c55e,transparent)"
+      : "linear-gradient(90deg,transparent,#16a34a,transparent)",
+    btnActiveBg:     dark
+      ? "linear-gradient(135deg,#22c55e,#4ade80)"
+      : "linear-gradient(135deg,#16a34a,#22c55e)",
+    btnActiveText:   dark ? "#052e16"                   : "#f0fdf4",
+    btnDisabledBg:   dark ? "rgba(255,255,255,0.05)"    : "rgba(21,128,61,0.05)",
+    btnDisabledText: dark ? "#166534"                   : "#86a897",
+    statBg:          dark ? "rgba(34,197,94,0.04)"      : "rgba(22,163,74,0.05)",
+    statBorder:      dark ? "rgba(34,197,94,0.12)"      : "rgba(22,163,74,0.15)",
+    statLabel:       dark ? "#166534"                   : "#86a897",
+    statDivider:     dark ? "rgba(34,197,94,0.1)"       : "rgba(22,163,74,0.12)",
+    yieldValue:      dark ? "#22c55e"                   : "#16a34a",
+    yieldUnit:       dark ? "#166534"                   : "#86a897",
+    rulesValue:      dark ? "#f0fdf4"                   : "#052e16",
+    apyBg:           dark ? "rgba(34,197,94,0.1)"       : "rgba(22,163,74,0.08)",
+    apyBorder:       dark ? "rgba(34,197,94,0.25)"      : "rgba(22,163,74,0.25)",
+    apyText:         dark ? "#22c55e"                   : "#16a34a",
+    shimmerBg:       dark ? "#0d1f10"                   : "#f4fdf5",
+    shimmerBlock:    dark ? "#122016"                   : "#e8f5ea",
+  };
 
   if (loading) {
     return (
       <div style={{
-        background: '#0f0f14', border: '1px solid rgba(255,255,255,0.07)',
-        borderRadius: '20px', padding: '32px',
+        background: T.cardBg, border: `1px solid ${T.cardBorder}`,
+        borderRadius: 20, padding: 32,
+        boxShadow: dark ? "none" : "0 1px 4px rgba(0,0,0,0.06)",
+        transition: "background 0.4s ease",
       }}>
-        <div style={{ height: '16px', width: '96px', background: '#16161d', borderRadius: '4px' }} />
-        <div style={{ height: '48px', width: '160px', background: '#16161d', borderRadius: '4px', marginTop: '16px' }} />
+        <div style={{ height: 16, width: 96, background: T.shimmerBlock, borderRadius: 4 }} />
+        <div style={{ height: 48, width: 160, background: T.shimmerBlock, borderRadius: 4, marginTop: 16 }} />
       </div>
     );
   }
 
+  const canWithdraw = balance > 0;
+
   return (
     <div style={{
-      background: '#0f0f14',
-      border: '1px solid rgba(255,255,255,0.07)',
-      borderRadius: '20px',
-      padding: '32px',
-      position: 'relative',
-      overflow: 'hidden',
+      background: T.cardBg,
+      border: `1px solid ${T.cardBorder}`,
+      borderRadius: 20, padding: 32,
+      position: "relative", overflow: "hidden",
+      boxShadow: dark ? "none" : "0 1px 6px rgba(0,0,0,0.07)",
+      transition: "background 0.4s ease, border-color 0.4s ease",
+      fontFamily: "'DM Sans', sans-serif",
     }}>
-      {/* Glow behind balance */}
+      
       <div style={{
-        position: 'absolute', top: '50%', left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: '200px', height: '200px',
-        background: 'radial-gradient(circle, rgba(129,140,248,0.08), transparent 70%)',
-        pointerEvents: 'none',
+        position: "absolute", top: "50%", left: "50%",
+        transform: "translate(-50%,-50%)",
+        width: 220, height: 220,
+        background: `radial-gradient(circle,${T.glowBg},transparent 70%)`,
+        pointerEvents: "none",
       }} />
 
-      {/* Balance */}
-      <div style={{ textAlign: 'center', marginBottom: '32px', position: 'relative' }}>
-        <p style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#52525b', marginBottom: '12px' }}>
+     
+      <div style={{ textAlign: "center", marginBottom: 28, position: "relative" }}>
+        <p style={{
+          fontSize: 11, fontWeight: 600, letterSpacing: "0.12em",
+          textTransform: "uppercase", color: T.labelText, marginBottom: 12,
+        }}>
           Total Balance
         </p>
-        <p style={{ fontSize: '56px', fontWeight: 900, letterSpacing: '-0.04em', color: '#e4e4e7', margin: '0 0 4px', fontVariantNumeric: 'tabular-nums', lineHeight: 1 }}>
+        <p style={{
+          fontSize: 56, fontWeight: 900, letterSpacing: "-0.04em",
+          color: T.balanceText, margin: "0 0 4px",
+          fontVariantNumeric: "tabular-nums", lineHeight: 1,
+          fontFamily: "'Syne', sans-serif",
+        }}>
           {formatBalance(balance)}
         </p>
-        <p style={{ fontSize: '14px', fontWeight: 500, color: '#71717a', margin: 0 }}>FLOW</p>
-        <div style={{ width: '48px', height: '1px', margin: '16px auto 0', background: 'linear-gradient(90deg, transparent, #818cf8, transparent)' }} />
+        <p style={{ fontSize: 14, fontWeight: 500, color: T.unitText, margin: 0 }}>FLOW</p>
+        <div style={{
+          width: 48, height: 1, margin: "14px auto 0",
+          background: T.dividerLine,
+        }} />
       </div>
 
-      {/* Withdraw Button */}
-      <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+    
+      <div style={{ textAlign: "center", marginBottom: 24 }}>
         <button
           onClick={() => setWithdrawModalOpen(true)}
-          disabled={balance <= 0}
+          disabled={!canWithdraw}
           style={{
-            padding: '12px 28px',
-            fontSize: '13px',
-            fontWeight: 600,
-            background: balance > 0 ? 'linear-gradient(135deg, #818cf8, #6366f1)' : 'rgba(255,255,255,0.05)',
-            border: 'none',
-            borderRadius: '10px',
-            color: balance > 0 ? '#fff' : '#52525b',
-            cursor: balance > 0 ? 'pointer' : 'not-allowed',
-            letterSpacing: '0.02em',
-            transition: 'transform 0.15s',
+            padding: "12px 28px", fontSize: 13, fontWeight: 700,
+            background: canWithdraw ? T.btnActiveBg : T.btnDisabledBg,
+            border: "none", borderRadius: 10,
+            color: canWithdraw ? T.btnActiveText : T.btnDisabledText,
+            cursor: canWithdraw ? "pointer" : "not-allowed",
+            letterSpacing: "0.02em",
+            transition: "transform 0.15s, box-shadow 0.15s",
+            boxShadow: canWithdraw
+              ? (dark ? "0 4px 16px rgba(34,197,94,0.2)" : "0 4px 16px rgba(22,163,74,0.2)")
+              : "none",
+            fontFamily: "'DM Sans', sans-serif",
           }}
-          onMouseEnter={(e) => balance > 0 && (e.currentTarget.style.transform = 'translateY(-1px)')}
-          onMouseLeave={(e) => (e.currentTarget.style.transform = 'translateY(0)')}
+          onMouseEnter={e => { if (canWithdraw) { e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.boxShadow = dark ? "0 8px 24px rgba(34,197,94,0.3)" : "0 8px 24px rgba(22,163,74,0.3)"; } }}
+          onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = canWithdraw ? (dark ? "0 4px 16px rgba(34,197,94,0.2)" : "0 4px 16px rgba(22,163,74,0.2)") : "none"; }}
         >
           💸 Withdraw Funds
         </button>
       </div>
 
-      {/* Stats */}
-      <div style={{ display: 'flex', gap: '16px' }}>
-        {/* Yield */}
+   
+      <div style={{ display: "flex", gap: 12, alignItems: "stretch" }}>
+       
         <div style={{
-          flex: 1, background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.06)',
-          borderRadius: '12px', padding: '16px', textAlign: 'center'
+          flex: 1, background: T.statBg, border: `1px solid ${T.statBorder}`,
+          borderRadius: 12, padding: 16, textAlign: "center",
         }}>
-          <p style={{ fontSize: '10px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#52525b', marginBottom: '8px' }}>
+          <p style={{ fontSize: 10, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.1em", color: T.statLabel, marginBottom: 8, margin: "0 0 8px" }}>
             Pending Yield
           </p>
-          <p style={{ fontSize: '22px', fontWeight: 700, color: '#34d399', margin: '0 0 2px', fontVariantNumeric: 'tabular-nums' }}>
+          <p style={{ fontSize: 22, fontWeight: 700, color: T.yieldValue, margin: "0 0 2px", fontVariantNumeric: "tabular-nums", fontFamily: "'Syne', sans-serif" }}>
             {formatYield(yieldEarned)}
           </p>
-          <p style={{ fontSize: '10px', color: '#52525b', margin: 0 }}>FLOW</p>
+          <p style={{ fontSize: 10, color: T.yieldUnit, margin: 0 }}>FLOW</p>
         </div>
 
-        <div style={{ width: '1px', background: 'rgba(255,255,255,0.06)', flexShrink: 0 }} />
+        
+        <div style={{ width: 1, background: T.statDivider, flexShrink: 0 }} />
 
-        {/* Rules */}
+       
         <div style={{
-          flex: 1, background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.06)',
-          borderRadius: '12px', padding: '16px', textAlign: 'center'
+          flex: 1, background: T.statBg, border: `1px solid ${T.statBorder}`,
+          borderRadius: 12, padding: 16, textAlign: "center",
         }}>
-          <p style={{ fontSize: '10px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#52525b', marginBottom: '8px' }}>
+          <p style={{ fontSize: 10, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.1em", color: T.statLabel, marginBottom: 8, margin: "0 0 8px" }}>
             Active Rules
           </p>
-          <p style={{ fontSize: '22px', fontWeight: 700, color: '#e4e4e7', margin: '0 0 6px', fontVariantNumeric: 'tabular-nums' }}>
+          <p style={{ fontSize: 22, fontWeight: 700, color: T.rulesValue, margin: "0 0 6px", fontVariantNumeric: "tabular-nums", fontFamily: "'Syne', sans-serif" }}>
             {rulesCount}
           </p>
           <span style={{
-            fontSize: '10px', fontWeight: 600, color: '#34d399',
-            background: 'rgba(52,211,153,0.12)', border: '1px solid rgba(52,211,153,0.2)',
-            borderRadius: '99px', padding: '2px 8px'
+            fontSize: 10, fontWeight: 700, color: T.apyText,
+            background: T.apyBg, border: `1px solid ${T.apyBorder}`,
+            borderRadius: 99, padding: "2px 8px",
           }}>
             ~5% APY
           </span>
         </div>
       </div>
 
-      {/* Withdraw Modal */}
       <WithdrawModal
         open={withdrawModalOpen}
         onClose={() => setWithdrawModalOpen(false)}
         currentBalance={balance}
-        onSuccess={() => {
-          onBalanceUpdate?.();
-        }}
+        onSuccess={() => onBalanceUpdate?.()}
       />
     </div>
   );
