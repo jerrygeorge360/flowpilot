@@ -241,7 +241,7 @@ flowpilot/
 ## Acknowledgments
 
 - [Flow Foundation](https://flow.com) — consumer-friendly L1, Cadence language, native scheduling
-- [NEAR AI](https://cloud.near.ai) — private, TEE-secured inference infrastructure
+- [NEAR AI](https://cloud.near.ai) — private, TEE-secured inference infrastructure.
 - Flow community — FCL, documentation, testnet support
 
 ---
