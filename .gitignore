@@ -5,7 +5,7 @@
 # Local sponsor credential note
 SPONSOR_CREDENTIALS.local.txt
 .next/
-.github/
+.github/copilot-instructions.md
 node_modules/
 
 devinfo/

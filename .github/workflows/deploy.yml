@@ -1,0 +1,58 @@
+name: Deploy FlowPilot
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run Database Migrations
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          npm ci
+          npx prisma migrate deploy
+
+
+      - name: Deploy to Azure VM
+        uses: appleboy/ssh-action@master
+        with:
+          host:     ${{ secrets.AZURE_VM_HOST }}
+          username: ${{ secrets.AZURE_VM_USER }}
+          key:      ${{ secrets.AZURE_VM_SSH_KEY }}
+          port:     22
+          script: |
+            set -e
+
+            # Clone or update the FlowPilot repository
+            cd ~/flowpilot || git clone https://${{ secrets.GH_TOKEN }}:x-oauth-basic@github.com/jerrygeorge360/flowpilot.git ~/flowpilot && cd ~/flowpilot
+            git pull origin main
+
+            # Write the root .env securely from GitHub actions
+            cat > .env << "ENVEOF"
+            NEAR_AI_API_KEY=${{ secrets.NEAR_AI_API_KEY }}
+            NEXT_PUBLIC_FLOW_NETWORK=${{ secrets.NEXT_PUBLIC_FLOW_NETWORK || 'testnet' }}
+            NEXT_PUBLIC_VAULT_CONTRACT=${{ secrets.NEXT_PUBLIC_VAULT_CONTRACT }}
+            NEXT_PUBLIC_RULES_CONTRACT=${{ secrets.NEXT_PUBLIC_RULES_CONTRACT }}
+            NEXT_PUBLIC_HANDLER_CONTRACT=${{ secrets.NEXT_PUBLIC_HANDLER_CONTRACT }}
+            FLOW_SPONSOR_ADDRESS=${{ secrets.FLOW_SPONSOR_ADDRESS }}
+            FLOW_SPONSOR_PRIVATE_KEY=${{ secrets.FLOW_SPONSOR_PRIVATE_KEY }}
+            NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=${{ secrets.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID }}
+            DATABASE_URL=${{ secrets.DATABASE_URL }}
+            ENVEOF
+
+            # Restart the container
+            docker compose up --build -d
+
+            echo "✅ FlowPilot Deployment complete!"
