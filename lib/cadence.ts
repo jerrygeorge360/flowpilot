@@ -1,6 +1,6 @@
 import { fcl } from "./flow";
 
-const VAULT_CONTRACT = process.env.NEXT_PUBLIC_VAULT_CONTRACT ?? "0xFLOWPILOT";
+const VAULT_CONTRACT = process.env.NEXT_PUBLIC_VAULT_CONTRACT ?? "0xbd9a0dc67c96cda1";
 
 /**
  * Request sponsorship for a transaction from the backend

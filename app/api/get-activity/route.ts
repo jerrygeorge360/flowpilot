@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-const VAULT_CONTRACT = process.env.NEXT_PUBLIC_VAULT_CONTRACT ?? "0xFLOWPILOT";
+const VAULT_CONTRACT = process.env.NEXT_PUBLIC_VAULT_CONTRACT ?? "0xbd9a0dc67c96cda1";
 
 export async function GET(request: Request) {
   try {

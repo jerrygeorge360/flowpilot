@@ -92,18 +92,24 @@ export default function DashboardPage() {
     if (!user.addr) return;
     if (!silent) setBalanceLoading(true);
     try {
-      const res = await fetch(`/api/get-balance?address=${user.addr}`, { cache:"no-store" });
+      const res = await fetch(`/api/get-balance?address=${encodeURIComponent(user.addr)}`, { cache:"no-store" });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const d = await res.json();
       if (d.balance !== undefined) setBalance(Number(d.balance) || 0);
       if (d.principal !== undefined) setPrincipal(Number(d.principal) || 0);
       if (d.pendingYield !== undefined) setPendingYield(Number(d.pendingYield) || 0);
-    } catch (e) { console.error(e); } finally { setBalanceLoading(false); }
+    } catch (e) { 
+      if (!silent) console.error("Balance fetch failed:", e); 
+    } finally { 
+      setBalanceLoading(false); 
+    }
   }
 
   async function fetchRules() {
     if (!user.addr) return;
     try {
-      const res = await fetch(`/api/get-rules?address=${user.addr}`, { cache:"no-store" });
+      const res = await fetch(`/api/get-rules?address=${encodeURIComponent(user.addr)}`, { cache:"no-store" });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const d = await res.json();
       if (d.rules) {
         const transformed = d.rules.map((ev: any, idx: number) => ({
@@ -118,16 +124,17 @@ export default function DashboardPage() {
         setRules(transformed);
         setRulesCount(transformed.filter((r: any) => r.active).length);
       }
-    } catch (e) { console.error(e); }
+    } catch (e) { /* silent fail for rules background fetch */ }
   }
 
   async function fetchActivity() {
     if (!user.addr) return;
     try {
-      const res = await fetch(`/api/get-activity?address=${user.addr}`, { cache:"no-store" });
+      const res = await fetch(`/api/get-activity?address=${encodeURIComponent(user.addr)}`, { cache:"no-store" });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const d = await res.json();
       if (d.activities) setActivityItems(d.activities);
-    } catch (e) { console.error(e); }
+    } catch (e) { /* silent activity fail */ }
   }
 
   async function confirmPlan() {
