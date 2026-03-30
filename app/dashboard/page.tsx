@@ -25,7 +25,8 @@ export default function DashboardPage() {
   const [balance, setBalance] = useState(0);
   const [principal, setPrincipal] = useState(0);
   const [pendingYield, setPendingYield] = useState(0);
-  const [balanceLoading, setBalanceLoading] = useState(false);
+  // const [balanceLoading, setBalanceLoading] = useState(false);
+  const [initialBalanceLoad, setInitialBalanceLoad] = useState(true);
   const [rulesCount, setRulesCount] = useState(0);
   const [rules, setRules] = useState<any[]>([]);
   const [activityItems, setActivityItems] = useState<ActivityItem[]>([]);
@@ -88,17 +89,21 @@ export default function DashboardPage() {
     return () => clearInterval(id);
   }, [user.addr]);
 
-  async function fetchBalance() {
-    if (!user.addr) return;
-    setBalanceLoading(true);
-    try {
-      const res = await fetch(`/api/get-balance?address=${user.addr}`, { cache:"no-store" });
-      const d = await res.json();
-      if (d.balance !== undefined) setBalance(Number(d.balance) || 0);
-      if (d.principal !== undefined) setPrincipal(Number(d.principal) || 0);
-      if (d.pendingYield !== undefined) setPendingYield(Number(d.pendingYield) || 0);
-    } catch (e) { console.error(e); } finally { setBalanceLoading(false); }
+async function fetchBalance() {
+  if (!user.addr) return;
+  // Don't set balanceLoading on background polls — only on first load
+  try {
+    const res = await fetch(`/api/get-balance?address=${user.addr}`, { cache: "no-store" });
+    const d = await res.json();
+    if (d.balance !== undefined) setBalance(Number(d.balance) || 0);
+    if (d.principal !== undefined) setPrincipal(Number(d.principal) || 0);
+    if (d.pendingYield !== undefined) setPendingYield(Number(d.pendingYield) || 0);
+  } catch (e) {
+    console.error(e);
+  } finally {
+    setInitialBalanceLoad(false); // Only clears once, never flips back to true
   }
+}
 
   async function fetchRules() {
     if (!user.addr) return;
@@ -258,7 +263,7 @@ export default function DashboardPage() {
 
           
             <div className="main-grid d2">
-              <BalanceCard balance={balance} rulesCount={rulesCount} yieldEarned={yieldEarned} loading={balanceLoading} onBalanceUpdate={fetchBalance} />
+              <BalanceCard balance={balance} rulesCount={rulesCount} yieldEarned={yieldEarned} loading={initialBalanceLoad} onBalanceUpdate={fetchBalance} />
               <ActivityFeed items={activityItems} />
             </div>
 
@@ -292,7 +297,7 @@ export default function DashboardPage() {
             )}
 
           
-            {user.addr && rules.length === 0 && !balanceLoading && (
+            {user.addr && rules.length === 0 && !initialBalanceLoad && (
               <div className="warn-box d4">
                 <p style={{ fontSize:13, color:"#fbbf24", margin:0, lineHeight:1.5 }}>⚠️ Can't see your rules? You may need to publish the RuleBook capability.</p>
                 <button className="warn-btn" onClick={fixRuleBookCapability}>Fix RuleBook Capability</button>
