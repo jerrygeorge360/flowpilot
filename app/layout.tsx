@@ -24,6 +24,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         />
       </head>
       <body
+        suppressHydrationWarning={true}
         style={{
           background: "#09090b",
           color: "#e4e4e7",

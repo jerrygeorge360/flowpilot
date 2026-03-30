@@ -84,13 +84,13 @@ export default function DashboardPage() {
 
   useEffect(() => {
     if (!user.addr) return;
-    const id = setInterval(fetchBalance, 15000);
+    const id = setInterval(() => fetchBalance(true), 15000);
     return () => clearInterval(id);
   }, [user.addr]);
 
-  async function fetchBalance() {
+  async function fetchBalance(silent = false) {
     if (!user.addr) return;
-    setBalanceLoading(true);
+    if (!silent) setBalanceLoading(true);
     try {
       const res = await fetch(`/api/get-balance?address=${user.addr}`, { cache:"no-store" });
       const d = await res.json();
@@ -174,14 +174,14 @@ export default function DashboardPage() {
         @keyframes gradientShift{0%,100%{background-position:0% 50%;}50%{background-position:100% 50%;}}
         @keyframes themeFade{from{opacity:.6;}to{opacity:1;}}
 
-        .d1{opacity:0;animation:fadeUp .55s ease forwards .05s;}
-        .d2{opacity:0;animation:fadeUp .55s ease forwards .15s;}
-        .d3{opacity:0;animation:fadeUp .55s ease forwards .25s;}
-        .d4{opacity:0;animation:fadeUp .55s ease forwards .35s;}
-        .d5{opacity:0;animation:fadeUp .55s ease forwards .45s;}
-        .d6{opacity:0;animation:fadeUp .55s ease forwards .55s;}
+        .d1{opacity:0;animation:fadeUp .55s ease forwards .05s;will-change:transform,opacity;}
+        .d2{opacity:0;animation:fadeUp .55s ease forwards .15s;will-change:transform,opacity;}
+        .d3{opacity:0;animation:fadeUp .55s ease forwards .25s;will-change:transform,opacity;}
+        .d4{opacity:0;animation:fadeUp .55s ease forwards .35s;will-change:transform,opacity;}
+        .d5{opacity:0;animation:fadeUp .55s ease forwards .45s;will-change:transform,opacity;}
+        .d6{opacity:0;animation:fadeUp .55s ease forwards .55s;will-change:transform,opacity;}
 
-        .theme-transition{animation:themeFade .3s ease forwards;}
+        .theme-transition{animation:themeFade .3s ease forwards;will-change:opacity;}
 
         .main-grid{display:grid;grid-template-columns:1fr;gap:14px;margin-bottom:16px;}
         @media(min-width:640px){.main-grid{grid-template-columns:3fr 2fr;gap:20px;margin-bottom:20px;}}

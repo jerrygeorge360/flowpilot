@@ -24,7 +24,7 @@ export async function GET(request: Request) {
     const [vaultCreatedEvents, depositEvents, ruleCreatedEvents, scheduledEvents] = await Promise.all([
       fetchFlowEvents(`A.${VAULT_CONTRACT.replace("0x", "")}.FlowPilotVault.VaultCreated`, normalizedAddress, "owner", currentHeight, 30),
       fetchFlowEvents(`A.${VAULT_CONTRACT.replace("0x", "")}.FlowPilotVault.Deposited`, normalizedAddress, "owner", currentHeight, 40),
-      fetchFlowEvents(`A.${VAULT_CONTRACT.replace("0x", "")}.AutomationRules.RuleCreated`, normalizedAddress, "owner", currentHeight, 120),
+      fetchFlowEvents(`A.${VAULT_CONTRACT.replace("0x", "")}.AutomationRulesV2.RuleCreated`, normalizedAddress, "owner", currentHeight, 120),
       fetchFlowEvents(`A.8c5303eaa26202d6.FlowTransactionScheduler.Scheduled`, normalizedAddress, "transactionHandlerOwner", currentHeight, 120),
     ]);
 

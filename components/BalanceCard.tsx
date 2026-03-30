@@ -64,13 +64,49 @@ export default function BalanceCard({
   if (loading) {
     return (
       <div style={{
-        background: T.cardBg, border: `1px solid ${T.cardBorder}`,
+        background: T.cardBg,
+        border: `1px solid ${T.cardBorder}`,
         borderRadius: 20, padding: 32,
-        boxShadow: dark ? "none" : "0 1px 4px rgba(0,0,0,0.06)",
-        transition: "background 0.4s ease",
+        position: "relative", overflow: "hidden",
+        boxShadow: dark ? "none" : "0 1px 6px rgba(0,0,0,0.07)",
+        transition: "background 0.4s ease, border-color 0.4s ease",
+        fontFamily: "'DM Sans', sans-serif",
+        minHeight: 334, // Approximate stable height
       }}>
-        <div style={{ height: 16, width: 96, background: T.shimmerBlock, borderRadius: 4 }} />
-        <div style={{ height: 48, width: 160, background: T.shimmerBlock, borderRadius: 4, marginTop: 16 }} />
+        {/* Skeleton Shimmer Mask */}
+        <div style={{ textAlign: "center", marginBottom: 28, position: "relative" }}>
+          <div style={{ 
+            height: 12, width: 80, background: T.shimmerBlock, borderRadius: 4, 
+            margin: "0 auto 12px", opacity: 0.5, animation: "pulse-dot 2s ease infinite" 
+          }} />
+          <div style={{ 
+            height: 56, width: 140, background: T.shimmerBlock, borderRadius: 8, 
+            margin: "0 auto 10px", opacity: 0.8, animation: "pulse-dot 2s ease infinite" 
+          }} />
+          <div style={{ 
+            height: 14, width: 40, background: T.shimmerBlock, borderRadius: 4, 
+            margin: "0 auto", opacity: 0.4, animation: "pulse-dot 2s ease infinite" 
+          }} />
+        </div>
+
+        <div style={{ textAlign: "center", marginBottom: 24 }}>
+          <div style={{ 
+            height: 42, width: 154, background: T.shimmerBlock, borderRadius: 10, 
+            margin: "0 auto", opacity: 0.3, animation: "pulse-dot 2s ease infinite" 
+          }} />
+        </div>
+
+        <div style={{ display: "flex", gap: 12, alignItems: "stretch" }}>
+          <div style={{ 
+            flex: 1, height: 86, background: T.statBg, border: `1px solid ${T.statBorder}`, 
+            borderRadius: 12, opacity: 0.5, animation: "pulse-dot 2s ease infinite" 
+          }} />
+          <div style={{ width: 1, background: T.statDivider, flexShrink: 0 }} />
+          <div style={{ 
+            flex: 1, height: 86, background: T.statBg, border: `1px solid ${T.statBorder}`, 
+            borderRadius: 12, opacity: 0.5, animation: "pulse-dot 2s ease infinite" 
+          }} />
+        </div>
       </div>
     );
   }

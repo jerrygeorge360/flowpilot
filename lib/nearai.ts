@@ -78,7 +78,7 @@ export async function parseIntent(userMessage: string): Promise<ParsedIntent> {
       Authorization: `Bearer ${process.env.NEAR_AI_API_KEY}`,
     },
     body: JSON.stringify({
-      model: "deepseek-ai/DeepSeek-V3.1",
+      model: "anthropic/claude-sonnet-4-5",
       max_tokens: 500,
       temperature: 0.1,
       messages: [
