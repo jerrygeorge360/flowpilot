@@ -1,8 +1,5 @@
 <div align="center">
 
-<!-- PLACEHOLDER: Replace with your banner image (1280×640px recommended) -->
-![FlowPilot Banner](./assets/banner.png)
-
 # FlowPilot
 
 ### Tell your wallet what you want. It handles the rest.
@@ -24,14 +21,7 @@ Consumer DeFi automation on Flow blockchain — describe a financial goal in pla
 
 ## 📺 Demo Video
 
-<!-- PLACEHOLDER: Embed or link your demo video here -->
-<!-- Option A — YouTube embed (replace VIDEO_ID): -->
-<!-- [![Watch the demo](https://img.youtube.com/vi/VIDEO_ID/maxresdefault.jpg)](https://www.youtube.com/watch?v=VIDEO_ID) -->
-
-<!-- Option B — Raw video file: -->
-<!-- <video src="./assets/demo.mp4" controls width="100%"></video> -->
-
-> 📹 **Demo video coming soon.** Check back here or visit the [submission page](#).
+[![Watch the FlowPilot Demo](https://img.youtube.com/vi/Aism6USHLdE/maxresdefault.jpg)](https://www.youtube.com/watch?v=Aism6USHLdE)
 
 ---
 
