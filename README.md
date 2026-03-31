@@ -44,8 +44,6 @@ Consumer DeFi automation on Flow blockchain — describe a financial goal in pla
 
 ## 1. Problem & Solution
 
-<!-- PLACEHOLDER: Replace with a problem/solution split-screen image -->
-![Problem vs Solution](./assets/problem-solution.png)
 
 ### The Problem
 
