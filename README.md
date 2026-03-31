@@ -21,7 +21,7 @@ Consumer DeFi automation on Flow blockchain — describe a financial goal in pla
 
 ## 📺 Demo Video
 
-[![Watch the FlowPilot Demo](https://img.youtube.com/vi/Aism6USHLdE/maxresdefault.jpg)](https://www.youtube.com/watch?v=Aism6USHLdE)
+[![FlowPilot Demo Video](https://img.shields.io/badge/Watch_Demo-3--7_min-red?style=for-the-badge&logo=youtube)](https://youtu.be/Aism6USHLdE)
 
 ---
 
